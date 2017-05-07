@@ -1249,18 +1249,18 @@ div#header-sticky-wrapper {
    position: absolute;
    left: 0;
    top: 150%;
-   width: 345px;
-   background-color: #222;
+   width: 300px;
+   background-color: rgba(34,34,34,0.8);
    z-index: 9999;
    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
    	  filter: alpha(opacity=0);
      opacity: 0;  
    visibility: hidden;
-  -webkit-transition: all 0.3s ease-in-out;
-	   -moz-transition: all 0.3s ease-in-out;
-	    -ms-transition: all 0.3s ease-in-out;
-	     -o-transition: all 0.3s ease-in-out;
-	        transition: all 0.3s ease-in-out;
+  	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-ms-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
 }
 
 /* right sub-menu */
@@ -1283,7 +1283,7 @@ div#header-sticky-wrapper {
 
 #mainnav ul.submenu li ul {
    position: absolute;
-   left: 360px;
+   left: 300px;
    top: 0 !important;
 }
 
