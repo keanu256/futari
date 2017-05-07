@@ -125,42 +125,72 @@
                                 <li>
                                     <a class="active" href="#rev_slider_1078_1_wrapper">Home</a>
                                 </li>
+                                <li class="has-sub"><a href="courses-grid.html">Blogs</a>
+                                    <ul class="submenu"> 
+                                        <li><a href="courses-grid.html">Cultures</a></li>
+                                        <li><a href="courses-grid-sidebar.html">Foods</a></li> 
+                                        <li><a href="courses-list-sidebar.html">Places</a></li>    
+                                    </ul><!-- /.submenu -->
+                                </li> 
                                 <li class="has-sub"><a href="courses-grid.html">Courses</a>
                                     <ul class="submenu"> 
-                                        <li><a href="courses-grid.html">Courses grid</a></li>
-                                        <li><a href="courses-grid-sidebar.html">Courses grid sidebar</a></li> 
-                                        <li><a href="courses-list-sidebar.html">Courses list sidebar</a></li>   
-                                        <li><a href="courses-single.html">Courses single</a></li>   
+                                        <li><a href="courses-grid.html">Basic</a>
+                                            <ul class="submenu"> 
+                                                <li><a href="courses-grid.html">Hiragana</a></li>
+                                                <li><a href="courses-grid-sidebar.html">Katakana</a></li> 
+                                            </ul><!-- /.submenu -->
+                                        </li>
+                                        <li><a href="courses-grid.html">Pre-Immediately</a>
+                                            <ul class="submenu"> 
+                                                <li><a href="courses-grid.html">Lesson 1 -> 25</a></li>
+                                                <li><a href="courses-grid-sidebar.html">Lesson 26 -> 50</a></li>  
+                                            </ul><!-- /.submenu -->
+                                        </li>
+                                        <li><a href="courses-grid.html">Immediately</a>
+                                            <ul class="submenu"> 
+                                                <li><a href="courses-grid.html">N3</a></li>
+                                            </ul><!-- /.submenu -->
+                                        </li>
+                                        <li><a href="courses-grid.html">Upper-Immediately</a>
+                                            <ul class="submenu"> 
+                                                <li><a href="courses-grid.html">N2</a></li>
+                                                <li><a href="courses-grid.html">N1</a></li>
+                                            </ul><!-- /.submenu -->
+                                        </li>
+                                        <li><a href="courses-grid.html">Kanji</a>
+                                            <ul class="submenu"> 
+                                                <li><a href="courses-grid.html">214 Radicals</a></li>
+                                            </ul><!-- /.submenu -->
+                                        </li>
+                                    </ul><!-- /.submenu -->
+                                </li>
+
+                                <li class="has-sub"><a href="courses-grid.html">News</a>
+                                    <ul class="submenu"> 
+                                        <li><a href="courses-grid.html">Easy</a></li>
+                                        <li><a href="courses-grid-sidebar.html">Advantage</a></li>   
+                                    </ul><!-- /.submenu -->
+                                </li>
+
+                                <li class="has-sub"><a href="courses-grid.html">Practice</a>
+                                    <ul class="submenu"> 
+                                        <li><a href="courses-grid.html">Listening</a></li>
+                                        <li><a href="courses-grid-sidebar.html">Quiz</a></li> 
                                     </ul><!-- /.submenu -->
                                 </li> 
 
-                                <li><a href="#about">About</a>
-                                </li>
+                                <li class="has-sub"><a href="courses-grid.html">Resources</a>
+                                    <ul class="submenu"> 
+                                        <li><a href="courses-grid.html">Documents</a></li>
+                                        <li><a href="courses-grid-sidebar.html">Test</a></li> 
+                                        <li><a href="courses-grid-sidebar.html">Other</a></li> 
+                                    </ul><!-- /.submenu -->
+                                </li> 
 
-                                <li><a href="#team">Team</a>              
-                                </li>                               
-
-                                <li><a href="#blog">Blog</a>
-                                </li>
-
-                                <li><a href="#contact">Contact</a>
-                                </li>
+                                <li><a href="courses-grid.html">Approve</a></li> 
                             </ul><!-- /.menu -->
                         </nav><!-- /.mainnav -->    
                     </div><!-- /.nav-wrap -->
-
-                    <div id="s" class="show-search">
-                            <a href="#"><i class="fa fa-search"></i></a>         
-                        </div><!-- /.show-search -->
-                    
-                    <div class="submenu top-search">
-                        <div class="widget widget_search">
-                            <form class="search-form">
-                                <input type="search" class="search-field" placeholder="Search …">
-                                <input type="submit" class="search-submit">
-                            </form>
-                        </div>
-                    </div>
                 </div><!-- /.header-inner --> 
             </div>
         </header><!-- /.header -->

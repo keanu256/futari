@@ -1028,7 +1028,7 @@ div#header-sticky-wrapper {
 }
 
 .header .header-wrap .logo {	
-	width: 186px;
+	width: 120px;
 	height: 45px;
 	-webkit-transition: all 0.3s ease-in-out;
 	   -moz-transition: all 0.3s ease-in-out;
@@ -1113,7 +1113,7 @@ div#header-sticky-wrapper {
 }
 
 .widget.widget_search .search-form .search-submit {
-    background-image: url(../icon/arrow.png);
+    background-image: url(../img/icon/arrow.png);
     background-repeat: no-repeat;
     background-position: center;
     width: 24px;
