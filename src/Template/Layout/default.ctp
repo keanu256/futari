@@ -111,7 +111,7 @@
             <div class="container">
                 <div class="header-wrap clearfix">
                     <div id="logo" class="logo">
-                        <a href="index-2.html" rel="home">
+                        <a href="../demo" rel="home">
                             <?= $this->Html->image("logo.png",["alt"=>"image"])?>
                         </a>
                     </div><!-- /.logo -->            

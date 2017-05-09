@@ -16,8 +16,19 @@ define('ALPHABET', 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678
  *
  * @property \App\Model\Table\UsersTable $Users
  */
-class UsersController extends AppController
+class UsersController extends AuthController
 {
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+
+        $this->Auth->allow([
+            'logout', 
+            'facebooklogin', 
+            'facebookLoginCallback', 
+            'googlelogin', 
+            'googleLoginCallback' 
+        ]);
+    }
 
     /**
      * Index method
@@ -33,7 +44,7 @@ class UsersController extends AppController
     }
 
     public function login(){
-
+        
     }
 
     public function facebooklogin() {
@@ -153,7 +164,6 @@ class UsersController extends AppController
                     $this->Auth->setUser($newUser->toArray());
                 } else {
                     $this->Auth->setUser($query[0]->toArray());
-                    //$session->write("testuser",$query[0]);
                 }
                 return $this->redirect(['controller' => 'Pages', 'action' => 'display']);
             } else {
