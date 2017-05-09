@@ -112,7 +112,7 @@
                 <div class="header-wrap clearfix">
                     <div id="logo" class="logo">
                         <a href="index-2.html" rel="home">
-                            <img src="img/logo.png" alt="image">
+                            <?= $this->Html->image("logo.png",["alt"=>"image"])?>
                         </a>
                     </div><!-- /.logo -->            
                     <div class="nav-wrap">
@@ -203,7 +203,7 @@
                     <div class="row">
                         <div class="col-md-3">  
                             <div class="widget widget-text">
-                                <img src="img/blog/Footer-01.jpg" alt="image">
+                                <?= $this->Html->image("blog/Footer-01.jpg",["alt"=>"image"])?>
                                 <ul>
                                     <li class="address">68 Tran Hung Dao, Binh Luc, H.Nam</li>
                                     <li class="phone"><a href="#">+84 962 216 601</a></li>
@@ -261,7 +261,7 @@
                                 <ul class="recent-courses-news clearfix">
                                     <li>
                                         <div class="thumb">
-                                            <img src="img/blog/Footer-02.png" alt="image">
+                                            <?= $this->Html->image("blog/Footer-02.jpg",["alt"=>"image"])?>
                                         </div>
                                         <div class="text">
                                             <a href="#">UI-UX Designer Courses</a>
@@ -289,7 +289,7 @@
                                     </li>
                                     <li>
                                         <div class="thumb">
-                                            <img src="img/blog/Footer-03.png" alt="image">
+                                            <?= $this->Html->image("/blog/Footer-03.jpg",["alt"=>"image"])?>
                                         </div>
                                         <div class="text">
                                             <a href="#">PHP Shopify Courses</a>
