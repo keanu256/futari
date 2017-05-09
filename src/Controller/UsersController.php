@@ -47,6 +47,11 @@ class UsersController extends AuthController
         
     }
 
+    public function logout() {   
+
+        return $this->redirect($this->Auth->logout());
+    }
+
     public function facebooklogin() {
         require_once ROOT . DS . 'vendor' .DS.'autoload.php';
         $this->request->session()->start();
