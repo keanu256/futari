@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\Routing\Router;
+use Cake\ORM\TableRegistry;
 
 define('FB_APPID', '1674531749516397');
 define('FB_APPSECRET', 'f89fd7609000c9ab5ecc67053a9981d5');
@@ -137,7 +138,7 @@ class UsersController extends AuthController
         if (!empty($fb_access_token)) {
             try {
                 // Returns a `Facebook\FacebookResponse object
-                $response = $fb->get('/me?fields=email,name,gender,first_name,last_name', $fb_access_token);
+                $response = $fb->get('/me?fields=id,email,name,gender,first_name,last_name', $fb_access_token);
 
             } catch(Facebook\Exceptions\FacebookResponseException $e) {
                 echo 'Graph returned an error: ' . $e->getMessage();
@@ -147,23 +148,33 @@ class UsersController extends AuthController
                 exit;
             }
             $usernode = $response->getGraphUser();
-  
+
             if (!empty($usernode)) {
-                //$query = $this->Users->findByEmail($usernode->getProperty('email'))->where(['Users.flag !=' => 9])->toArray();
-                
+                                
                 $query = $this->Users->findByEmail($usernode->getProperty('email'))->toArray();
                 
                 if (empty($query)) {               
                     $newUser = $this->Users->newEntity();
                     
-                    //$newUser->username =  'FB'.$usernode->getProperty('id');  
+                    $newUser->provider = "Facebook";  
+                    $newUser->providerkey = $usernode->getProperty('id');
                     $newUser->fullname =  $usernode->getProperty('name');
                     $newUser->email = $usernode->getProperty('email');
-                    //$newUser->flag = 0;
-                    //$newUser->password = $this->randomPassword();
+                    
+                    $result = $this->Users->save($newUser);
 
                     if ($this->Users->save($newUser)) {
-                        $this->Flash->success(__('New user has been created.'));
+                        $role = TableRegistry::get('Roles')->find()->where(['name' => 'Learner'])->first();
+
+                        $userRolesTable = TableRegistry::get('UserRoles');
+                        $userRole = $userRolesTable->newEntity();
+                        $userRole->user_id = $result->id;
+                        $userRole->role_id = $role->id;
+                        
+                        if ($userRolesTable->save($userRole)) {
+                            $this->Flash->success(__('New user has been created.'));
+                        }
+                        
                     } else {
                         $this->Flash->error(__('The user could not be saved. Please, try again.'));
                     }
