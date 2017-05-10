@@ -129,6 +129,7 @@ class UsersController extends AuthController
                 exit;
             }
         }
+        
         $session->write('fb_access_token', (string) $accessToken);
         
         $fb_access_token = $session->read('fb_access_token');
