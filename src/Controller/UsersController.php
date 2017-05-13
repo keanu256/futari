@@ -5,6 +5,8 @@ use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
+
 
 define('FB_APPID', '1674531749516397');
 define('FB_APPSECRET', 'f89fd7609000c9ab5ecc67053a9981d5');
@@ -27,7 +29,8 @@ class UsersController extends AuthController
             'facebooklogin', 
             'facebookLoginCallback', 
             'googlelogin', 
-            'googleLoginCallback' 
+            'googleLoginCallback',
+            'enroll'
         ]);
     }
 
@@ -58,6 +61,10 @@ class UsersController extends AuthController
         $this->request->session()->start();
         $this->autoRender = false;
 
+        $redirect_controller = $this->request->getQuery('redirect_controller');
+        $redirect_action = $this->request->getQuery('redirect_action');
+        $redirect_id = $this->request->getQuery('redirect_id');
+
         $fb = new \Facebook\Facebook([
           'app_id' => FB_APPID,
           'app_secret' => FB_APPSECRET,
@@ -66,9 +73,14 @@ class UsersController extends AuthController
         $helper = $fb->getRedirectLoginHelper();
         $permissions = ['email', 'user_likes']; // optional
         
-        // $callbackurl = 'http://localhost/Alofood/users/facebookLoginCallback';
-        $callbackUrl = Router::url(['controller' => 'Users', 'action' => 'facebookLoginCallback', '_full' => true]);
-        // $callbackurl = Router::url('/homepage/facebookLoginCallback', true);
+        $callbackUrl = Router::url([
+            'controller' => 'Users', 
+            'action' => 'facebookLoginCallback', 
+            'redirect_controller' => $redirect_controller,
+            'redirect_action' => $redirect_action,
+            'redirect_id' => $redirect_id,
+            '_full' => true]);
+    
         $loginUrl = $helper->getLoginUrl($callbackUrl, $permissions);
         $this->redirect($loginUrl);
     }
@@ -77,6 +89,10 @@ class UsersController extends AuthController
         $session = $this->request->session();
         $this->autoRender = false;
         $this->request->session()->start();
+
+        $redirect_controller = $this->request->getQuery('redirect_controller');
+        $redirect_action = $this->request->getQuery('redirect_action');
+        $redirect_id = $this->request->getQuery('redirect_id');
 
         $fb = new \Facebook\Facebook([
           'app_id' => FB_APPID,
@@ -182,11 +198,66 @@ class UsersController extends AuthController
                 } else {
                     $this->Auth->setUser($query[0]->toArray());
                 }
+                
+                if (!empty($redirect_controller) && !empty($redirect_action)) { 
+                    return $this->redirect([
+                        'controller' => $redirect_controller,
+                        'action' => $redirect_action,
+                        $redirect_id,
+                        'enroll'
+                        ]);
+                    
+                }
                 return $this->redirect(['controller' => 'Pages', 'action' => 'display']);
+              
             } else {
                 $this->Flash->error(__('Facebook loi cmnr!!!'));
                 return $this->redirect(['controller' => 'Users', 'action' => 'login']);
             }
         }
+    }
+
+    public function enroll($id = null) {
+        $this->autoRender = false;
+        $userId = $this->Auth->user('id');
+        if (!empty($userId)) {
+            if ($this->request->is('ajax')) {
+                $this->response->disableCache();
+                $course = TableRegistry::get('Courses')->get($id)->toArray();
+                if (empty($course)) {
+                    $result = json_encode([
+                    'message' => 'fail',
+                    'error' => 'hacker']);
+                } else {
+                    $enrollmentTable = TableRegistry::get('Enrollments');
+                    $enroll = $enrollmentTable->newEntity();
+
+                    $enroll->enrollment_date = Time::now();
+                    $enroll->user_id = $userId;
+                    $enroll->course_id = $id;
+                    $enroll->progress = 0;
+                    $enroll->grade = 0;
+
+                    if ($enrollmentTable->save($enroll)) {
+                        $result = json_encode([
+                            'message' => 'success',
+                            'id' => $id]);
+                    } else {
+                        $result = json_encode([
+                        'message' => 'fail']);
+                    }
+                }
+            }
+        } else {
+            $result = json_encode([
+                'message' => 'fail',
+                'error' => 'auth']);
+        }
+
+        $this->response->type('json');
+        $this->response->body($result);
+
+        return $this->response;
+
     }
 }
