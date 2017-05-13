@@ -13,13 +13,26 @@
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <!-- Bootstrap  -->
     
+    <style type="text/css">
+        body.modal-open {
+            overflow: visible;
+        }
+        .modal-dialog {
+            padding-top: 100px;
+        }
+    </style>
+
+    <!-- Bootstrap  -->
     <?= $this->Html->css("base.css"); ?>
     <?= $this->Html->css("bootstrap.css"); ?>
+
     <!-- Theme Style -->
     <?= $this->Html->css("shortcodes.css"); ?>
     <?= $this->Html->css("style.css"); ?>
+
+    <!--Sweet Alert 2-->
+    <?= $this->Html->css("sweetalert2/sweetalert2.min.css"); ?>
 
     <!-- REVOLUTION LAYERS STYLES -->
     <?= $this->Html->css("../revolution/css/layers.css"); ?>
@@ -33,6 +46,8 @@
     <?= $this->Html->css("animate.css"); ?>
     <!-- Favicon and touch icons  -->
     <link href="../icon/favicon.png" rel="shortcut icon">
+
+    <?= $this->Html->script("jquery.min.js"); ?>
 
     <!--[if lt IE 9]>
         <script src="javascript/html5shiv.js"></script>
@@ -376,9 +391,29 @@
         </div>
     </div><!-- /. boxed -->
 
+    <div id="loginModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    
+                    
 
-        <!-- Javascript -->
-    <?= $this->Html->script("jquery.min.js"); ?>
+                    <button id="fb-login" type="button">Fb Test</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Javascript -->
+    
     <?= $this->Html->script("bootstrap.min.js"); ?>
     <?= $this->Html->script("jquery.easing.js"); ?>
     <?= $this->Html->script("owl.carousel.js"); ?>
@@ -388,6 +423,9 @@
     <?= $this->Html->script("jquery.cookie.js"); ?>
     <?= $this->Html->script("jquery-validate.js"); ?>
     <?= $this->Html->script("main.js"); ?>
+
+    <!--Sweet Alert 2-->
+    <?= $this->Html->script("sweetalert2/sweetalert2.min.js"); ?>
 
     <!-- Revolution Slider -->
     <?= $this->Html->script("../revolution/js/jquery.themepunch.tools.min.js"); ?>
@@ -408,6 +446,7 @@
     <script type="text/javascript">
         $(function () {
             if (window.location.hash && window.location.hash == '#_=_') {
+                
                 if (window.history && history.pushState) {
                     window.history.pushState("", document.title, window.location.pathname);
                 } else {
