@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 /**
  * Application Controller
@@ -27,6 +28,30 @@ use Cake\Event\Event;
  */
 class AppController extends Controller
 {
+    public function beforeFilter(Event $event){
+        $this->online();
+    }
+
+    public function online() {
+        $session = $this->request->session();
+        $online_session_id = $session->read('Auth.User.id');
+        if (empty($online_session_id)) return;
+     
+        $userOnlineModel = TableRegistry::get('usersonline');
+        $user_online = $userOnlineModel->findByIpClient($online_session_id)->toArray();
+        $time_out = time() + 900 ;
+     
+        if (empty($user_online) || $user_online == false) {
+            $user_online_new = $userOnlineModel->newEntity();
+            $user_online_new['ip_client'] = $online_session_id;
+            $user_online_new['time_in'] = date('Y-m-d H:i:s',time());
+            $user_online_new['time_out'] = $time_out;
+            $userOnlineModel->deleteAll(['time_out <=' => time()] , false , false);
+            $userOnlineModel->save($user_online_new);
+        } else {
+            $userOnlineModel->updateAll(['time_out' => $time_out],['ip_client' => $online_session_id]);
+        }
+    }
 
     /**
      * Initialization hook method.
