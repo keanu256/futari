@@ -148,7 +148,7 @@
 
                                 <div class="row" style="margin-bottom:10px;">
                                     <div class="col-sm-4">
-                                        <input class="form-control" id="filter" placeholder="Search..." type="text">
+                                        <input class="form-control" id="filter" placeholder="Search..." type="text" />
                                     </div>
                                     <div class="col-sm-2">
                                         <select class="filter-status form-control">
@@ -168,122 +168,66 @@
 
                                 </div>
 
-                                <table id="footable-res2" class="demo footable-loaded footable no-paging default" data-filter="#filter" data-filter-text-only="true">
+                                <table id="footable-res2" class="demo" data-filter="#filter" data-filter-text-only="true">
                                     <thead>
                                         <tr>
-                                            <th data-toggle="true" class="footable-sortable footable-first-column">
+                                            <th data-toggle="true">
                                                 First Name
-                                            <span class="footable-sort-indicator"></span></th>
-                                            <th class="footable-sortable">
+                                            </th>
+                                            <th>
                                                 Last Name
-                                            <span class="footable-sort-indicator"></span></th>
-                                            <th data-hide="phone,tablet" style="display: table-cell;" class="footable-sortable">
+                                            </th>
+                                            <th data-hide="phone,tablet">
                                                 Job Title
-                                            <span class="footable-sort-indicator"></span></th>
-                                            <th data-hide="phone,tablet" style="display: table-cell;" class="footable-sortable">
+                                            </th>
+                                            <th data-hide="phone,tablet">
                                                 DOB
-                                            <span class="footable-sort-indicator"></span></th>
-                                            <th data-hide="phone" class="footable-sortable footable-last-column">
+                                            </th>
+                                            <th data-hide="phone">
                                                 Status
-                                            <span class="footable-sort-indicator"></span></th>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr style="display: table-row;" class="">
-                                            <td class="footable-first-column"><span class="footable-toggle"></span>Isidra</td>
+                                        <tr>
+                                            <td>Isidra</td>
                                             <td><a href="#">Boudreaux</a>
                                             </td>
-                                            <td style="display: table-cell;">Traffic Court Referee</td>
-                                            <td data-value="78025368997" style="display: table-cell;">22 Jun 1972</td>
-                                            <td data-value="1" class="footable-last-column">
+                                            <td>Traffic Court Referee</td>
+                                            <td data-value="78025368997">22 Jun 1972</td>
+                                            <td data-value="1">
                                                 <span class="status-metro status-active" title="Active">Active</span>
                                             </td>
                                         </tr>
-                                        <tr style="display: none;" class="footable-filtered">
-                                            <td class=""><span class="footable-toggle"></span>Shona</td>
+                                        <tr>
+                                            <td>Shona</td>
                                             <td>Woldt</td>
-                                            <td style="display: table-cell;"><a href="#">Airline Transport Pilot</a>
+                                            <td><a href="#">Airline Transport Pilot</a>
                                             </td>
-                                            <td data-value="370961043292" style="display: table-cell;">3 Oct 1981</td>
-                                            <td data-value="2" class="">
+                                            <td data-value="370961043292">3 Oct 1981</td>
+                                            <td data-value="2">
                                                 <span class="status-metro status-disabled" title="Disabled">Disabled</span>
                                             </td>
                                         </tr>
-                                        <tr style="display: none;" class="footable-filtered">
-                                            <td class=""><span class="footable-toggle"></span>Granville</td>
+                                        <tr>
+                                            <td>Granville</td>
                                             <td>Leonardo</td>
-                                            <td style="display: table-cell;">Business Services Sales Representative</td>
-                                            <td data-value="-22133780420" style="display: table-cell;">19 Apr 1969</td>
-                                            <td data-value="3" class="">
+                                            <td>Business Services Sales Representative</td>
+                                            <td data-value="-22133780420">19 Apr 1969</td>
+                                            <td data-value="3">
                                                 <span class="status-metro status-suspended" title="Suspended">Suspended</span>
                                             </td>
                                         </tr>
-                                        <tr style="display: table-row;" class="">
-                                            <td class="footable-first-column"><span class="footable-toggle"></span>Easer</td>
+                                        <tr>
+                                            <td>Easer</td>
                                             <td>Dragoo</td>
-                                            <td style="display: table-cell;">Drywall Stripper</td>
-                                            <td data-value="250833505574" style="display: table-cell;">13 Dec 1977</td>
-                                            <td data-value="1" class="footable-last-column">
+                                            <td>Drywall Stripper</td>
+                                            <td data-value="250833505574">13 Dec 1977</td>
+                                            <td data-value="1">
                                                 <span class="status-metro status-active" title="Active">Active</span>
                                             </td>
                                         </tr>
-                                        <tr style="display: none;" class="footable-filtered">
-                                            <td class=""><span class="footable-toggle"></span>Maple</td>
-                                            <td>Halladay</td>
-                                            <td style="display: table-cell;">Aviation Tactical Readiness Officer</td>
-                                            <td data-value="694116650726" style="display: table-cell;">30 Dec 1991</td>
-                                            <td data-value="3" class="">
-                                                <span class="status-metro status-suspended" title="Suspended">Suspended</span>
-                                            </td>
-                                        </tr>
-                                        <tr style="display: none;" class="footable-filtered">
-                                            <td class=""><span class="footable-toggle"></span>Maxine</td>
-                                            <td><a href="#">Woldt</a>
-                                            </td>
-                                            <td style="display: table-cell;"><a href="#">Business Services Sales Representative</a>
-                                            </td>
-                                            <td data-value="561440464855" style="display: table-cell;">17 Oct 1987</td>
-                                            <td data-value="2" class="">
-                                                <span class="status-metro status-disabled" title="Disabled">Disabled</span>
-                                            </td>
-                                        </tr>
-                                        <tr style="display: none;" class="footable-filtered">
-                                            <td class=""><span class="footable-toggle"></span>Lorraine</td>
-                                            <td>Mcgaughy</td>
-                                            <td style="display: table-cell;">Hemodialysis Technician</td>
-                                            <td data-value="437400551390" style="display: table-cell;">11 Nov 1983</td>
-                                            <td data-value="2" class="">
-                                                <span class="status-metro status-disabled" title="Disabled">Disabled</span>
-                                            </td>
-                                        </tr>
-                                        <tr style="display: none;" class="footable-filtered">
-                                            <td class=""><span class="footable-toggle"></span>Lizzee</td>
-                                            <td><a href="#">Goodlow</a>
-                                            </td>
-                                            <td style="display: table-cell;">Technical Services Librarian</td>
-                                            <td data-value="-257733999319" style="display: table-cell;">1 Nov 1961</td>
-                                            <td data-value="3" class="">
-                                                <span class="status-metro status-suspended" title="Suspended">Suspended</span>
-                                            </td>
-                                        </tr>
-                                        <tr style="display: table-row;" class="">
-                                            <td class="footable-first-column"><span class="footable-toggle"></span>Judi</td>
-                                            <td>Badgett</td>
-                                            <td style="display: table-cell;">Electrical Lineworker</td>
-                                            <td data-value="362134712000" style="display: table-cell;">23 Jun 1981</td>
-                                            <td data-value="1" class="footable-last-column">
-                                                <span class="status-metro status-active" title="Active">Active</span>
-                                            </td>
-                                        </tr>
-                                        <tr style="display: none;" class="footable-filtered">
-                                            <td class=""><span class="footable-toggle"></span>Lauri</td>
-                                            <td>Hyland</td>
-                                            <td style="display: table-cell;">Blackjack Supervisor</td>
-                                            <td data-value="500874333932" style="display: table-cell;">15 Nov 1985</td>
-                                            <td data-value="3" class="">
-                                                <span class="status-metro status-suspended" title="Suspended">Suspended</span>
-                                            </td>
-                                        </tr>
+                                       
                                     </tbody>
                                 </table>
 
@@ -296,6 +240,8 @@
 
                 </div>
             </div>
+
+
             <div class="content-wrap">
                 <div class="row">
 

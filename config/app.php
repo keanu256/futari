@@ -233,7 +233,7 @@ return [
             'password' => 'matkhau2men',
             'database' => 'futari',
             'encoding' => 'utf8',
-            'timezone' => 'UTC',
+            'timezone' => 'Asia/Bangkok',
             'flags' => [],
             'cacheMetadata' => true,
             'log' => false,

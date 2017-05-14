@@ -43,7 +43,7 @@ class AdmincpController extends AuthController
     public function courses(){
     	$this->validatePage();
 
-    	
+    	debug(date('Y-m-d H:i:s',time()));
     }
 
     private function validatePage(){
