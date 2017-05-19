@@ -101,10 +101,9 @@
                             </a>
                         </li>
                         <li>
-                            <a class="tooltip-tip ajax-load" href="mail.html" title="Mail">
-                                <i class="icon-mail"></i>
-                                <span>Portfolios</span>
-                            </a>
+                            <?= $this->Html->link('<i class="icon-window"></i><span>Portfolios</span>',
+                                ['controller'=>'admincp','action'=>'portfolios'],
+                                ['escape'=>false,'title'=>'Portfolios']); ?>
                         </li>
                         <li>
                             <a class="tooltip-tip ajax-load" href="mail.html" title="Mail">

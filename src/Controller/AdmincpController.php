@@ -46,6 +46,20 @@ class AdmincpController extends AuthController
     	debug(date('Y-m-d H:i:s',time()));
     }
 
+    public function lessons(){
+    	$this->validatePage();
+    }
+
+    public function topics(){
+    	$this->validatePage();
+    }
+
+    public function portfolios(){
+    	$this->validatePage();
+    	$portfolios = TableRegistry::get('portfolios')->find();
+        $this->set(compact('portfolios'));
+    }
+
     private function validatePage(){
     	$this->viewBuilder()->setLayout(false);	
     	$this->_checkSessionKey();

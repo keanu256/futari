@@ -42,15 +42,9 @@
     <?= $this->Element('Admincp/MenuSide');?>
     <!-- END OF SIDE MENU -->
 
-
-
     <!--  PAPER WRAP -->
     <div class="wrap-fluid">
         <div class="container-fluid paper-wrap bevel tlbr">
-
-
-
-
 
             <!-- CONTENT -->
             <!--TITLE -->
