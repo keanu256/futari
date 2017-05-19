@@ -197,12 +197,15 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-6">
+                                        <button type="button" data-toggle="modal" data-target="#addModal" class="btn btn-primary pull-right" style="margin-left:10px;" >
+                                            <span class="entypo-plus-squared"></span>&nbsp;&nbsp;Add
+                                        </button>
 
-                                        <a href="#clear" style="margin-left:10px;" class="pull-right btn btn-info clear-filter" title="clear filter">clear</a>
-                                        <a href="#api" class="pull-right btn btn-info filter-api" title="Filter using the Filter API">filter API</a>
+                                        <button type="button" class="btn btn-warning pull-right" style="margin-left:10px;">
+                                            <span class="entypo-print"></span>&nbsp;&nbsp;Print
+                                        </button>
 
-
-
+                                        
                                     </div>
 
                                 </div>
@@ -214,11 +217,13 @@
                                             <th>Name</th>
                                             <th>Description</th>
                                             <th>Status</th>
+                                            <th>Last updated</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php foreach($portfolios as $key): ?>
-                                            <tr>
+                                            <tr ondblclick="selectedID('<?= $key->id ?>');" id="tr<?= $key->id ?>" >
                                                 <td><?= $key->id ?></td>
                                                 <td><?= $key->name?></td>
                                                 <td><?= $key->description?></td>
@@ -229,6 +234,14 @@
                                                     <?php if($key->status == 1): ?>
                                                         <span class="status-metro status-disabled" title="Disabled">Disabled</span>
                                                     <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $key->created ?>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger pull-right" onclick="deleteTuple('<?= $key->id ?>','<?= $key->name ?>')">
+                                                        <span class="entypo-trash"></span>&nbsp;&nbsp;Delete
+                                                    </button>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -242,17 +255,6 @@
                     </div>
 
                 </div>
-            </div>
-
-
-            <div class="content-wrap">
-                
-
-
-
-                <!-- /END OF CONTENT -->
-
-
 
                 <!-- FOOTER -->
                 <div class="footer-space"></div>
@@ -268,12 +270,7 @@
 
                 </div>
                 <!-- / END OF FOOTER -->
-
-
             </div>
-
-
-
         </div>
         <!--  END OF PAPER WRAP -->
 
@@ -411,7 +408,45 @@
 
         <!-- END OF RIGHT SLIDER CONTENT-->
 
+        <!-- MODAL -->
 
+        <div class="modal fade" id="addModal" role="dialog">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">ADD NEW ENTRY</h4>
+                </div>
+                <div class="modal-body">
+                  <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success">Confirm</button>
+                </div>
+              </div>            
+            </div>
+        </div>
+
+        <div class="modal fade" id="editModal" role="dialog">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">EDIT</h4>
+                </div>
+                <div class="modal-body">
+                  <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success">Confirm</button>
+                </div>
+              </div>            
+            </div>
+        </div>
         <!-- MAIN EFFECT -->
 
         <?= $this->Html->script("/admin_assets/assets/js/preloader.js"); ?>
@@ -456,7 +491,26 @@
             $('#pageLength').change(function() {
                 oTable.page.len($(this).val()).draw();
             });
+
+            $('#btnDelete').click(function(){
+                
+            });
         });
+        
+        function selectedID(id){
+            $('#editModal').modal('show');
+        }
+
+        function deleteTuple(id,name){
+            if(confirm("Are you sure you want to delete "+ name +"?")){
+                var deleteHTML = '<button type="button" class="btn btn-danger pull-right" onclick="deleteTuple(1,2)"><span class="entypo-trash"></span>&nbsp;&nbsp;Delete</button>'
+                oTable.row.add(['4','5','6','7','8',deleteHTML]).draw(false);
+            }
+            else{
+                return false;
+            }
+        }
+
     </script>
 
     <script type="text/javascript">
