@@ -56,10 +56,33 @@ class AdmincpController extends AuthController
 
     public function portfolios(){
     	$this->validatePage();
+        $portfolios = TableRegistry::get('portfolios');
 
         if ($this->request->is('ajax')) {
             $this->autoRender = false;
-            $this->response->body(json_encode(['status'=>200,'message'=>'success']));
+
+            $func = $this->request->query('f');
+
+            if($func == "create"){
+                $name = $this->request->query('name');
+                $description = $this->request->query('description');
+                $status = $this->request->query('status');
+                if($status != 0 or $status != 1){
+                    $this->response->body(json_encode(['status'=>200,'message'=>'failed']));
+                }
+                $entity = $portfolios->newEntity();
+                $entity['name'] = $name;
+                $entity['description'] = $description;
+                $entity['status'] = $status;
+                $entity['created'] = 'now()';
+                if($result = $portfolios->save($entity)){
+                    // $obj = $portfolios->get($result->Id, [
+                    //     'contain' => []
+                    // ])->toArray();
+                    //$this->response->body(json_encode(['status'=>200,'message'=>'success','obj'=> json_encode($obj[0],JSON_UNESCAPED_UNICODE)]));
+                    $this->response->body(json_encode(['status'=>200,'message'=>'success','obj'=> $result->Id]));
+                }               
+            }          
         }
 
         if ($this->request->is('post')) {
@@ -67,7 +90,7 @@ class AdmincpController extends AuthController
             $this->response->body('DA THANH CONG POST');
         }
 
-    	$portfolios = TableRegistry::get('portfolios')->find();
+    	$portfolios = $portfolios->find();
         $this->set(compact('portfolios'));
     }
 

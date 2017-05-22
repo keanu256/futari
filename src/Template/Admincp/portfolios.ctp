@@ -212,23 +212,21 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Name</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="name">
+                                <input type="text" class="form-control" id="nameEntity">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Description</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" rows="5" id="comment" style="height: 100px !important;resize: none;"></textarea>
+                                <textarea class="form-control" rows="5" id="destxtArea" style="height: 100px !important;resize: none;"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Select list:</label>
+                            <label class="col-sm-2 control-label">Status:</label>
                             <div class="col-sm-9">
-                                <select class="form-control" id="sel1">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
+                                <select class="form-control" id="statusCb">
+                                    <option value = "0">Active</option>
+                                    <option value = "1">Disable</option>
                                 </select>
                             </div>
                         </div>
@@ -278,9 +276,11 @@
 
         <!-- DATATABLE -->
         <?= $this->Html->script("jquery.dataTables.min.js"); ?>
-
         <?= $this->Html->css("jquery.dataTables.min.css"); ?>
-        
+
+        <!-- SWEETALERT 2 -->
+        <?= $this->Html->script("sweetalert2/sweetalert2.min.js"); ?>
+        <?= $this->Html->css("sweetalert2/sweetalert2.min.css"); ?>
     <script type="text/javascript">
 
         $(document).ready(function() {
@@ -311,8 +311,15 @@
                 $('#btnConfirm').addClass(loadingSpin);
                 $('#btnConfirm').html(spin);
                 var csrfToken = $('#csrfToken').val();
+
                 $.ajax({
                     url: "portfolios",
+                    data : {
+                        name: $('#nameEntity').val(),
+                        description: $('#destxtArea').val(),
+                        status: $('#statusCb').val(),
+                        f:'create'
+                    },
                     // method: 'post',
                     // beforeSend: function(xhr){
                     //     xhr.setRequestHeader('X-CSRF-Token', csrfToken);
@@ -320,12 +327,15 @@
                     success: function(result){
                         var data = JSON.parse(result);
                         if(data.message == 'success'){
-                            
-
-
-                            $('#btnConfirm').removeClass(loadingSpin);
-                            $('#btnConfirm').html('Confirm');
+                            object = data.obj;
+                            var deleteHTML = '<button type="button" class="btn btn-danger pull-right" onclick="deleteTuple(1,2)"><span class="entypo-trash"></span>&nbsp;&nbsp;Delete</button>'
+                            //oTable.row.add(['4','5','6','7','8',deleteHTML]).draw(false);
+                            console.log(object);
+                            clearModal();
+                            swal('Success!','Data has been updated','success');
                         }
+                        $('#btnConfirm').removeClass(loadingSpin);
+                        $('#btnConfirm').html('Confirm');
                     }
                 });              
             });
@@ -341,25 +351,30 @@
             // } );
         });
         
+        function clearModal(){
+            $('#nameEntity').val("");
+            $('#destxtArea').val("");
+            $('#statusCb').val(0);
+        }
+
         function selectedID(id){
             $('#editModal').modal('show');
         }
 
         function deleteTuple(id,name){
-            if(confirm("Are you sure you want to delete "+ name +"?")){
-                //var deleteHTML = '<button type="button" class="btn btn-danger pull-right" onclick="deleteTuple(1,2)"><span class="entypo-trash"></span>&nbsp;&nbsp;Delete</button>'
-                //oTable.row.add(['4','5','6','7','8',deleteHTML]).draw(false);
-
-
+            swal({
+                title: "Are you sure you want to delete "+ name +"?",
+                text: "The data that has the same relationship will be deleted!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function () {                
                 oTable.row('#tr'+id).remove().draw( false );
-            }
-            else{
-                return false;
-            }
+                swal('Deleted!','Your file has been deleted.','success');
+            })
         }
-
-
-
     </script>
 </body>
 
