@@ -56,6 +56,17 @@ class AdmincpController extends AuthController
 
     public function portfolios(){
     	$this->validatePage();
+
+        if ($this->request->is('ajax')) {
+            $this->autoRender = false;
+            $this->response->body(json_encode(['status'=>200,'message'=>'success']));
+        }
+
+        if ($this->request->is('post')) {
+            $this->autoRender = false;
+            $this->response->body('DA THANH CONG POST');
+        }
+
     	$portfolios = TableRegistry::get('portfolios')->find();
         $this->set(compact('portfolios'));
     }

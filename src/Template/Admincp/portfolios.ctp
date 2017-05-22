@@ -206,42 +206,38 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">ADD NEW ENTRY</h4>
                 </div>
-                <div class="modal-body">
-                    <form method="get" class="form-horizontal bucket-form">
+                <form method="get" class="form-horizontal bucket-form">
+                    <div class="modal-body">
+                        <input id="csrfToken" type="hidden" value="<?= $this->request->params['_csrfToken'] ?>">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Help text</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control">
-                                <span class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.</span>
+                            <label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="name">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Help text</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control">
-                                <span class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.</span>
+                            <label class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" rows="5" id="comment" style="height: 100px !important;resize: none;"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">Help text</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control">
-                                <span class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.</span>
+                            <label class="col-sm-2 control-label">Select list:</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="sel1">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Help text</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control">
-                                <span class="help-block">A block of help text that breaks onto a new line and may extend beyond one line.</span>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success">Confirm</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success btnConfirmSpin" id="btnConfirm" >Confirm</button>
+                    </div>
+                </form>
               </div>            
             </div>
         </div>
@@ -309,9 +305,40 @@
                 oTable.page.len($(this).val()).draw();
             });
 
-            $('#btnDelete').click(function(){
-                
+            $('#btnConfirm').click(function(){
+                var spin = '<i class="fa fa-spinner fa-spin"></i>';
+                var loadingSpin = 'btnConfirmSpin disabled';
+                $('#btnConfirm').addClass(loadingSpin);
+                $('#btnConfirm').html(spin);
+                var csrfToken = $('#csrfToken').val();
+                $.ajax({
+                    url: "portfolios",
+                    // method: 'post',
+                    // beforeSend: function(xhr){
+                    //     xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+                    // },
+                    success: function(result){
+                        var data = JSON.parse(result);
+                        if(data.message == 'success'){
+                            
+
+
+                            $('#btnConfirm').removeClass(loadingSpin);
+                            $('#btnConfirm').html('Confirm');
+                        }
+                    }
+                });              
             });
+
+            // $('#tabledata tbody').on( 'click', 'tr', function () {
+            //     if ($(this).hasClass('selected') ) {
+            //         $(this).removeClass('selected');
+            //     }
+            //     else {
+            //         oTable.$('tr.selected').removeClass('selected');
+            //         $(this).addClass('selected');
+            //     }
+            // } );
         });
         
         function selectedID(id){
@@ -320,13 +347,18 @@
 
         function deleteTuple(id,name){
             if(confirm("Are you sure you want to delete "+ name +"?")){
-                var deleteHTML = '<button type="button" class="btn btn-danger pull-right" onclick="deleteTuple(1,2)"><span class="entypo-trash"></span>&nbsp;&nbsp;Delete</button>'
-                oTable.row.add(['4','5','6','7','8',deleteHTML]).draw(false);
+                //var deleteHTML = '<button type="button" class="btn btn-danger pull-right" onclick="deleteTuple(1,2)"><span class="entypo-trash"></span>&nbsp;&nbsp;Delete</button>'
+                //oTable.row.add(['4','5','6','7','8',deleteHTML]).draw(false);
+
+
+                oTable.row('#tr'+id).remove().draw( false );
             }
             else{
                 return false;
             }
         }
+
+
 
     </script>
 </body>
