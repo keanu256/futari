@@ -22,7 +22,23 @@
     
     <?= $this->Html->css("/admin_assets/assets/js/dataTable/lib/jquery.dataTables/css/DT_bootstrap.css"); ?>
     <?= $this->Html->css("/admin_assets/assets/js/dataTable/css/datatables.responsive.css"); ?>
+    <?= $this->Html->script("/admin_assets/tinymce/tinymce.min.js")?>
+    <script>tinymce.init({ 
+        selector:'textarea[id="edit-product-info"]',
+        height: 100,
+        theme: 'modern',
+        plugins: [
+        'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+        'searchreplace wordcount visualblocks visualchars code fullscreen',
+        'insertdatetime media nonbreaking save table contextmenu directionality',
+        'emoticons template paste textcolor colorpicker textpattern imagetools'
+        ],
+        toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        toolbar2: 'print preview media | forecolor backcolor emoticons',
+        image_advtab: true 
 
+        });
+    </script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -66,26 +82,52 @@
                             <div class="title-alt">
                                 <h6>Note Content</h6>
                                 <div class="titleClose">
-                                    <a class="gone" href="#Blank_PageClose">
-                                        <span class="entypo-cancel"></span>
+                                    <a class="gone" href="javascript:showEditNote()">
+                                        <span class="fa fa-pencil"></span>
                                     </a>
                                 </div>
-                                <div class="titleToggle">
-                                    <a class="nav-toggle-alt" href="#Blank_Page_Content">
-                                        <span class="entypo-up-open"></span>
+                                <div id="btnNoteSave" class="titleClose" style="display:none">
+                                    <a class="gone" href="javascript:saveNote()">
+                                        <span class="fa fa-floppy-o"></span>
                                     </a>
                                 </div>
-
+                                <div id="btnNoteHide" class="titleClose" style="display:none">
+                                    <a class="gone" href="javascript:hideEditNote()">
+                                        <span class="fa fa-times"></span>
+                                    </a>
+                                </div>
                             </div>
 
                             <div class="body-nest" id="Blank_Page_Content">
-
-                                Content Goes Here
+                                <div id="divedit-product-info" style="display:none">
+                                    <textarea id="edit-product-info">
+                                        <?= file_get_contents("note/nPortfolios.txt"); ?>
+                                    </textarea>
+                                </div>  
+                                <div id="product-info-panel">
+                                    <?= file_get_contents("note/nPortfolios.txt"); ?>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <!-- END OF BLANK PAGE -->
-
+                    <script type="text/javascript">
+                        function showEditNote(){
+                            $('#product-info-panel').hide();
+                            $('#divedit-product-info').show();                         
+                            $('#btnNoteSave').show();  
+                            $('#btnNoteHide').show();                       
+                        }
+                        function hideEditNote(){        
+                            $('#btnNoteHide').hide();                      
+                            $('#divedit-product-info').hide();                         
+                            $('#btnNoteSave').hide(); 
+                            $('#product-info-panel').show();                        
+                        }
+                        function saveNote(){
+                             console.log(tinyMCE.activeEditor.getContent());
+                        }
+                    </script>
 
                 </div>
 
