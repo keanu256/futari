@@ -155,7 +155,7 @@
                                     </thead>
                                     <tbody>
                                         <?php foreach($portfolios as $key): ?>
-                                            <tr ondblclick="selectedID('<?= $key->id ?>');" id="tr<?= $key->id ?>" >
+                                            <tr id="tr<?= $key->id ?>" >
                                                 <td><?= $key->id ?></td>
                                                 <td><?= $key->name?></td>
                                                 <td><?= $key->description?></td>
@@ -168,11 +168,14 @@
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>
-                                                    <?= $key->created ?>
+                                                    <?= $key->updated ?>
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-danger pull-right" onclick="deleteTuple('<?= $key->id ?>','<?= $key->name ?>')">
+                                                    <button style="margin-left:10px" type="button" class="btn btn-danger pull-right" onclick="deleteTuple('<?= $key->id ?>','<?= $key->name ?>',this)">
                                                         <span class="entypo-trash"></span>&nbsp;&nbsp;Delete
+                                                    </button>
+                                                    <button type="button" class="btn btn-info pull-right" onclick="selectedID('<?= $key->id ?>')">
+                                                        <span class="fa fa-pencil"></span>&nbsp;&nbsp;Edit
                                                     </button>
                                                 </td>
                                             </tr>
@@ -248,13 +251,35 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">EDIT</h4>
                 </div>
-                <div class="modal-body">
-                  <p>Some text in the modal.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success">Confirm</button>
-                </div>
+                <form method="get" class="form-horizontal bucket-form">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="ednameEntity">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" rows="5" id="eddestxtArea" style="height: 100px !important;resize: none;"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Status:</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="edstatusCb">
+                                    <option value = "0">Active</option>
+                                    <option value = "1">Disable</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success">Confirm</button>
+                    </div>
+                </form>    
               </div>            
             </div>
         </div>
@@ -327,19 +352,30 @@
                     success: function(result){
                         var data = JSON.parse(result);
                         if(data.message == 'success'){
-                            object = data.obj;
-                            var deleteHTML = '<button type="button" class="btn btn-danger pull-right" onclick="deleteTuple(1,2)"><span class="entypo-trash"></span>&nbsp;&nbsp;Delete</button>'
-                            //oTable.row.add(['4','5','6','7','8',deleteHTML]).draw(false);
-                            console.log(object);
+                            object = JSON.parse(data.obj);
+                            var deleteHTML = '<button style="margin-left:10px" type="button" class="btn btn-danger pull-right" onclick="deleteTuple('+"'"+object.id+"'"+','+"'"+object.name+"'"+',this)"><span class="entypo-trash"></span>&nbsp;&nbsp;Delete</button>';
+                            var editHTML = '<button type="button" class="btn btn-info pull-right" onclick="selectedID('+object.id+')"><span class="fa fa-pencil"></span>&nbsp;&nbsp;Edit</button>';
+                            if(object.status == 0){
+                                htmlStatus = '<span class="status-metro status-active" title="Active">Active</span>';
+                            }else{
+                                htmlStatus = '<span class="status-metro status-disabled" title="Disabled">Disabled</span>';
+                            }
+                            oTable.row.add([object.id,object.name,object.description,htmlStatus,object.updated,deleteHTML + editHTML]).draw(false);
                             clearModal();
                             swal('Success!','Data has been updated','success');
+                        }else{
+                            swal('Error!',data.message,'error');
                         }
                         $('#btnConfirm').removeClass(loadingSpin);
                         $('#btnConfirm').html('Confirm');
                     }
                 });              
             });
-
+            
+            $("#tabledata tr").dblclick(function() {
+                var id = $(this).find('td:first').html();
+                selectedID(id);
+            });
             // $('#tabledata tbody').on( 'click', 'tr', function () {
             //     if ($(this).hasClass('selected') ) {
             //         $(this).removeClass('selected');
@@ -358,10 +394,35 @@
         }
 
         function selectedID(id){
-            $('#editModal').modal('show');
+            $.ajax({
+                url: "portfolios",
+                data : {
+                    id: id,
+                    f:'info'
+                },
+                // method: 'post',
+                // beforeSend: function(xhr){
+                //     xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+                // },
+                success: function(result){
+                    var data = JSON.parse(result);
+                    if(data.message == 'success'){
+                        object = JSON.parse(data.obj);
+                        $('#ednameEntity').val(object.name);
+                        $('#eddestxtArea').val(object.description);
+                        $('#edstatusCb').val(object.status);
+                        $('#editModal').modal('show');
+                    }else{
+                        swal('Error!',data.message,'error');
+                    }
+                },
+                error: function(){
+                    swal('Error!','ID not found','error');
+                }
+            });           
         }
 
-        function deleteTuple(id,name){
+        function deleteTuple(id,name,e){
             swal({
                 title: "Are you sure you want to delete "+ name +"?",
                 text: "The data that has the same relationship will be deleted!",
@@ -370,9 +431,30 @@
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!'
-            }).then(function () {                
-                oTable.row('#tr'+id).remove().draw( false );
-                swal('Deleted!','Your file has been deleted.','success');
+            }).then(function () {     
+                $.ajax({
+                    url: "portfolios",
+                    data : {
+                        id: id,
+                        f:'delete'
+                    },
+                    // method: 'post',
+                    // beforeSend: function(xhr){
+                    //     xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+                    // },
+                    success: function(result){
+                        var data = JSON.parse(result);
+                        if(data.message == 'success'){
+                            oTable.row(e.closest('tr')).remove().draw( false );
+                            swal('Deleted!','Your file has been deleted.','success');
+                        }else{
+                            swal('Error!',data.message,'error');
+                        }
+                    },
+                    error: function(){
+                        swal('Error!','ID not found','error');
+                    }
+                });                        
             })
         }
     </script>

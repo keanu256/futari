@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 class AdmincpController extends AuthController
 {
@@ -64,25 +65,54 @@ class AdmincpController extends AuthController
             $func = $this->request->query('f');
 
             if($func == "create"){
-                $name = $this->request->query('name');
-                $description = $this->request->query('description');
+                $name = trim($this->request->query('name'));
+                $description = trim($this->request->query('description'));
                 $status = $this->request->query('status');
-                if($status != 0 or $status != 1){
-                    $this->response->body(json_encode(['status'=>200,'message'=>'failed']));
+                if($status != 0 and $status != 1){
+                    $this->response->body(json_encode(['status'=>200,'message'=>'Status Error']));
+                    return;
+                }
+                if($name == ""){
+                    $this->response->body(json_encode(['status'=>200,'message'=>'Empty Name']));
+                    return;
                 }
                 $entity = $portfolios->newEntity();
                 $entity['name'] = $name;
                 $entity['description'] = $description;
                 $entity['status'] = $status;
-                $entity['created'] = 'now()';
                 if($result = $portfolios->save($entity)){
-                    // $obj = $portfolios->get($result->Id, [
-                    //     'contain' => []
-                    // ])->toArray();
-                    //$this->response->body(json_encode(['status'=>200,'message'=>'success','obj'=> json_encode($obj[0],JSON_UNESCAPED_UNICODE)]));
-                    $this->response->body(json_encode(['status'=>200,'message'=>'success','obj'=> $result->Id]));
+                    $obj = $portfolios->find()->where(['id'=>$result->id])->toArray();
+                    $obj[0]['updated'] = Time::parse($obj[0]['updated'])->i18nFormat();
+                    $this->response->body(json_encode(['status'=>200,'message'=>'success',
+                        'obj'=> json_encode($obj[0],JSON_UNESCAPED_UNICODE)]));
+
+                }else{
+                    $this->response->body(json_encode(['status'=>200,'message'=>'dd']));  
                 }               
-            }          
+            }  
+
+            if($func == "delete"){
+                $id = trim($this->request->query('id'));
+                $object = $portfolios->get($id);
+                if($object != null){
+                    $portfolios->delete($object);
+                    $this->response->body(json_encode(['status'=>200,'message'=>'success'])); 
+                }else{
+                    $this->response->body(json_encode(['status'=>200,'message'=>'ID not found'])); 
+                }
+            }   
+
+            if($func == "info"){
+                $id = trim($this->request->query('id'));
+                $object = $portfolios->find()->where(['id'=>$id])->toArray();
+                if($object != null){
+                    $this->response->body(json_encode(['status'=>200,'message'=>'success',
+                        'obj'=> json_encode($object[0],JSON_UNESCAPED_UNICODE)
+                        ])); 
+                }else{
+                    $this->response->body(json_encode(['status'=>200,'message'=>'ID not found'])); 
+                }
+            }       
         }
 
         if ($this->request->is('post')) {
