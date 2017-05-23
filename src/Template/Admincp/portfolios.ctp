@@ -123,14 +123,16 @@
                                     </div>
                                     <div class="col-sm-1">
                                         <select class="filter-status form-control" id="pageLength">
-                                            <option value="1">Show 1</option>
-                                            <option value="10">Show 10</option>
-                                            <option value="20">Show 20</option>
+                                            <option value="10">10 Items</option>
+                                            <option value="15">15 Items</option>
+                                            <option value="20">20 Items</option>
+                                            <option value="30">30 Items</option>
+                                            <option value="50">50 Items</option>
                                         </select>
                                     </div>
                                     <div class="col-sm-6">
                                         <button type="button" data-toggle="modal" data-target="#addModal" class="btn btn-primary pull-right" style="margin-left:10px;" >
-                                            <span class="entypo-plus-squared"></span>&nbsp;&nbsp;Add
+                                            <span class="entypo-plus-squared"></span>&nbsp;&nbsp;New portfolio
                                         </button>
 
                                         <button type="button" class="btn btn-warning pull-right" style="margin-left:10px;">
@@ -155,7 +157,7 @@
                                     </thead>
                                     <tbody>
                                         <?php foreach($portfolios as $key): ?>
-                                            <tr id="tr<?= $key->id ?>" >
+                                            <tr>
                                                 <td><?= $key->id ?></td>
                                                 <td><?= $key->name?></td>
                                                 <td><?= $key->description?></td>
@@ -249,10 +251,11 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">EDIT</h4>
+                    <h4 class="modal-title" style="color:green;font-weight:bold;" id="editHeader">EDIT </h4>
                 </div>
                 <form method="get" class="form-horizontal bucket-form">
                     <div class="modal-body">
+                        <input id="editID" type="hidden" value="">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Name</label>
                             <div class="col-sm-9">
@@ -277,7 +280,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success">Confirm</button>
+                        <button type="button" class="btn btn-success" id="btnUpdate">Update</button>
                     </div>
                 </form>    
               </div>            
@@ -306,158 +309,9 @@
         <!-- SWEETALERT 2 -->
         <?= $this->Html->script("sweetalert2/sweetalert2.min.js"); ?>
         <?= $this->Html->css("sweetalert2/sweetalert2.min.css"); ?>
-    <script type="text/javascript">
-
-        $(document).ready(function() {
-            oTable = $('#tabledata').DataTable({
-                'sDom': '<bottom><"pagingCustom"ip>',
-                drawCallback: function(settings) {
-                    var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
-                    pagination.toggle(this.api().page.info().pages > 1);
-                }
-            });
-
-            $('#searchPortfolios').keyup(function(){
-                oTable.search($(this).val()).draw();
-            });
-
-
-            $('#statusFilter').change(function() {
-                oTable.column(3).search($(this).val()).draw();
-            });
-
-            $('#pageLength').change(function() {
-                oTable.page.len($(this).val()).draw();
-            });
-
-            $('#btnConfirm').click(function(){
-                var spin = '<i class="fa fa-spinner fa-spin"></i>';
-                var loadingSpin = 'btnConfirmSpin disabled';
-                $('#btnConfirm').addClass(loadingSpin);
-                $('#btnConfirm').html(spin);
-                var csrfToken = $('#csrfToken').val();
-
-                $.ajax({
-                    url: "portfolios",
-                    data : {
-                        name: $('#nameEntity').val(),
-                        description: $('#destxtArea').val(),
-                        status: $('#statusCb').val(),
-                        f:'create'
-                    },
-                    // method: 'post',
-                    // beforeSend: function(xhr){
-                    //     xhr.setRequestHeader('X-CSRF-Token', csrfToken);
-                    // },
-                    success: function(result){
-                        var data = JSON.parse(result);
-                        if(data.message == 'success'){
-                            object = JSON.parse(data.obj);
-                            var deleteHTML = '<button style="margin-left:10px" type="button" class="btn btn-danger pull-right" onclick="deleteTuple('+"'"+object.id+"'"+','+"'"+object.name+"'"+',this)"><span class="entypo-trash"></span>&nbsp;&nbsp;Delete</button>';
-                            var editHTML = '<button type="button" class="btn btn-info pull-right" onclick="selectedID('+object.id+')"><span class="fa fa-pencil"></span>&nbsp;&nbsp;Edit</button>';
-                            if(object.status == 0){
-                                htmlStatus = '<span class="status-metro status-active" title="Active">Active</span>';
-                            }else{
-                                htmlStatus = '<span class="status-metro status-disabled" title="Disabled">Disabled</span>';
-                            }
-                            oTable.row.add([object.id,object.name,object.description,htmlStatus,object.updated,deleteHTML + editHTML]).draw(false);
-                            clearModal();
-                            swal('Success!','Data has been updated','success');
-                        }else{
-                            swal('Error!',data.message,'error');
-                        }
-                        $('#btnConfirm').removeClass(loadingSpin);
-                        $('#btnConfirm').html('Confirm');
-                    }
-                });              
-            });
-            
-            $("#tabledata tr").dblclick(function() {
-                var id = $(this).find('td:first').html();
-                selectedID(id);
-            });
-            // $('#tabledata tbody').on( 'click', 'tr', function () {
-            //     if ($(this).hasClass('selected') ) {
-            //         $(this).removeClass('selected');
-            //     }
-            //     else {
-            //         oTable.$('tr.selected').removeClass('selected');
-            //         $(this).addClass('selected');
-            //     }
-            // } );
-        });
         
-        function clearModal(){
-            $('#nameEntity').val("");
-            $('#destxtArea').val("");
-            $('#statusCb').val(0);
-        }
-
-        function selectedID(id){
-            $.ajax({
-                url: "portfolios",
-                data : {
-                    id: id,
-                    f:'info'
-                },
-                // method: 'post',
-                // beforeSend: function(xhr){
-                //     xhr.setRequestHeader('X-CSRF-Token', csrfToken);
-                // },
-                success: function(result){
-                    var data = JSON.parse(result);
-                    if(data.message == 'success'){
-                        object = JSON.parse(data.obj);
-                        $('#ednameEntity').val(object.name);
-                        $('#eddestxtArea').val(object.description);
-                        $('#edstatusCb').val(object.status);
-                        $('#editModal').modal('show');
-                    }else{
-                        swal('Error!',data.message,'error');
-                    }
-                },
-                error: function(){
-                    swal('Error!','ID not found','error');
-                }
-            });           
-        }
-
-        function deleteTuple(id,name,e){
-            swal({
-                title: "Are you sure you want to delete "+ name +"?",
-                text: "The data that has the same relationship will be deleted!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then(function () {     
-                $.ajax({
-                    url: "portfolios",
-                    data : {
-                        id: id,
-                        f:'delete'
-                    },
-                    // method: 'post',
-                    // beforeSend: function(xhr){
-                    //     xhr.setRequestHeader('X-CSRF-Token', csrfToken);
-                    // },
-                    success: function(result){
-                        var data = JSON.parse(result);
-                        if(data.message == 'success'){
-                            oTable.row(e.closest('tr')).remove().draw( false );
-                            swal('Deleted!','Your file has been deleted.','success');
-                        }else{
-                            swal('Error!',data.message,'error');
-                        }
-                    },
-                    error: function(){
-                        swal('Error!','ID not found','error');
-                    }
-                });                        
-            })
-        }
-    </script>
+        <!-- PORTFOLIOS JS -->
+        <?= $this->Html->script("/admin_assets/jspage/portfolios.js"); ?>
 </body>
 
 </html>

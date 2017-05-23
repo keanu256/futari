@@ -112,6 +112,40 @@ class AdmincpController extends AuthController
                 }else{
                     $this->response->body(json_encode(['status'=>200,'message'=>'ID not found'])); 
                 }
+            } 
+
+            if($func == "update"){
+                $id = trim($this->request->query('id'));
+                $object = $portfolios->get($id, [
+                    'contain' => []
+                ]);
+                if($object != null){
+                    $name = trim($this->request->query('name'));
+                    $object['name'] = $name; 
+                    $object['description'] = trim($this->request->query('description'));
+                    $status = $this->request->query('status');
+                    $object['status'] = $status;
+                    if($name == ""){
+                        $this->response->body(json_encode(['status'=>200,'message'=>'Empty Name']));
+                        return;
+                    }
+                    if($status != 0 and $status != 1){
+                        $this->response->body(json_encode(['status'=>200,'message'=>'Status Error']));
+                        return;
+                    }
+                    if($portfolios->save($object)){
+                        $obj = $portfolios->find()->where(['id'=>$id])->toArray();
+                        $obj[0]['updated'] = Time::parse($obj[0]['updated'])->i18nFormat();
+                        
+                        $this->response->body(json_encode(['status'=>200,'message'=>'success',
+                           'obj'=> json_encode($obj[0],JSON_UNESCAPED_UNICODE)     
+                        ]));
+                    }else{
+                        $this->response->body(json_encode(['status'=>200,'message'=>'failed']));
+                    }
+                }else{
+                    $this->response->body(json_encode(['status'=>200,'message'=>'ID not found'])); 
+                }
             }       
         }
 
